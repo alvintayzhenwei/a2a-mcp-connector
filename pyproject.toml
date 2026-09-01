@@ -1,6 +1,6 @@
 [project]
 name = "a2a-mcp-connector"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generic MCP server to stream-connect an AI agent to any standard A2A endpoint, with a built-in A2A validator"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,7 +20,14 @@ classifiers = [
 # a2a-sdk pinned exactly (not >=), mirroring a2a-games / a2a-raid-mcp: this SDK
 # has real API churn between minors — bump deliberately and re-verify the call
 # shapes in a2a_client.py / validator.py against the new version, don't just relax it.
-dependencies = ["mcp>=1.12", "a2a-sdk==1.1.0", "httpx>=0.27"]
+#
+# mcp is CAPPED BELOW 2 for the same reason — see the longer note in
+# a2a-raid-mcp/pyproject.toml. `server.py` imports `mcp.server.fastmcp.FastMCP`,
+# which mcp 2.0 renamed and deleted, so an open upper bound let `uvx
+# a2a-mcp-connector` resolve mcp 2.1.1 and die at import. This package is the one
+# the PHASE games (Odd One Out / Agent Arena) tell visitors to install, so it was
+# broken in exactly the same way and for exactly as long.
+dependencies = ["mcp>=1.12,<2", "a2a-sdk==1.1.0", "httpx>=0.27"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
