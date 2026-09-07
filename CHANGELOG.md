@@ -1,6 +1,15 @@
 # Changelog
 
-## Unreleased
+## 0.1.2 (2026-09-07)
+
+- A `Publish` workflow using PyPI **trusted publishing**: a published GitHub
+  Release builds, tests and uploads the wheel via a short-lived OIDC token, so no
+  long-lived PyPI API token is stored in this repository.
+- Maintainer contact is `alvintay1987@gmail.com` (was a work address that is not
+  where anyone should reach this project).
+- `a2a-sdk` pinned `==1.1.2` (was `1.1.0`) and `mcp` locked to 1.29.1, both via
+  reviewed Dependabot pull requests with the suite green on 3.11 and 3.12. The
+  `mcp<2` cap is unchanged and still enforced by `tests/test_packaging.py`.
 
 - Development moved to its own repository,
   [alvintayzhenwei/a2a-mcp-connector](https://github.com/alvintayzhenwei/a2a-mcp-connector).

@@ -41,9 +41,8 @@ Any other MCP-aware client (Cursor, Claude Desktop, a hand-edited `.mcp.json`):
 }
 ```
 
-Before the package is published to PyPI, run it from a local checkout instead:
-`uv run a2a-mcp-connector` (from this directory) or
-`uvx --from ./a2a-mcp-connector/dist/<wheel> a2a-mcp-connector`.
+To run it from a checkout of this repository instead, use
+`uv run a2a-mcp-connector`.
 
 ## Tools
 
