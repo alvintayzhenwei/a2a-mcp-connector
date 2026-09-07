@@ -1,0 +1,46 @@
+name: Publish
+
+# Fires on a published GitHub Release, so cutting a release IS the publish
+# gesture and the tag, the release notes and the uploaded wheel can never
+# describe different code.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+    # A dedicated environment, so the publish can be gated on a required
+    # reviewer in the repository settings. Its name must match the "Environment
+    # name" configured on PyPI's trusted-publisher entry for this project.
+    environment: release
+    permissions:
+      contents: read
+      # Trusted publishing: GitHub mints a short-lived OIDC token that PyPI
+      # exchanges for an upload token. There is no long-lived PyPI API token
+      # stored in this repository's secrets, which is the point.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: '3.12'
+
+      # Belt and braces: never publish a build whose own tests do not pass.
+      - name: Test before publishing
+        run: |
+          uv sync --frozen --extra dev
+          uv run --frozen pytest -q
+
+      - name: Build sdist and wheel
+        run: uv build
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1

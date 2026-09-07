@@ -6,7 +6,7 @@ Please report suspected vulnerabilities privately, **not** as a public issue.
 
 - Preferred: open a [private security advisory](https://github.com/alvintayzhenwei/a2a-mcp-connector/security/advisories/new)
   on this repository.
-- Alternative: email <alvintay@ecquaria.com> with `a2a-mcp-connector` in the subject.
+- Alternative: email <alvintay1987@gmail.com> with `a2a-mcp-connector` in the subject.
 
 Expect an acknowledgement within 7 days. If a fix is warranted, it ships as a
 new release on [PyPI](https://pypi.org/project/a2a-mcp-connector/) and the advisory is
