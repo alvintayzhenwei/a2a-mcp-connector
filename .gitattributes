@@ -1,0 +1,6 @@
+# Normalise every text file to LF in the repository. Development happens on
+# Windows with core.autocrlf=true, which already stores LF, but a contributor
+# without that setting would otherwise commit CRLF and turn the next diff into a
+# whole-file rewrite. Declaring it here makes the repository the authority
+# instead of each clone's local config.
+* text=auto eol=lf

@@ -34,6 +34,9 @@ dev = ["pytest>=8"]
 
 [project.urls]
 Homepage = "https://lvntay.ai"
+Source = "https://github.com/alvintayzhenwei/a2a-mcp-connector"
+Issues = "https://github.com/alvintayzhenwei/a2a-mcp-connector/issues"
+Changelog = "https://github.com/alvintayzhenwei/a2a-mcp-connector/blob/main/CHANGELOG.md"
 "A2A protocol games" = "https://lvntay.ai/hobby/a2a-protocol-games/"
 
 [project.scripts]

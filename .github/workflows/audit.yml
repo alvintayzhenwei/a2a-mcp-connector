@@ -1,0 +1,35 @@
+name: Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly, so a CVE published against a pinned dependency surfaces even when
+    # nobody has pushed. Monday 06:17 UTC — off the hour, where every scheduled
+    # job on GitHub piles up and gets delayed.
+    - cron: '17 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  pip-audit:
+    name: pip-audit (locked dependencies)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.12'
+
+      # Audit what actually ships: the locked runtime set, with this project
+      # itself excluded (it is the thing being audited, not a dependency) and
+      # dev-only tools left out.
+      - name: Export the locked runtime dependencies
+        run: uv export --frozen --no-dev --no-emit-project --no-hashes --format requirements-txt -o requirements.audit.txt
+
+      - name: Audit
+        run: uvx pip-audit --requirement requirements.audit.txt --strict

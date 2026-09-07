@@ -1,5 +1,11 @@
 # a2a-mcp-connector
 
+[![PyPI](https://img.shields.io/pypi/v/a2a-mcp-connector)](https://pypi.org/project/a2a-mcp-connector/)
+[![CI](https://github.com/alvintayzhenwei/a2a-mcp-connector/actions/workflows/ci.yml/badge.svg)](https://github.com/alvintayzhenwei/a2a-mcp-connector/actions/workflows/ci.yml)
+[![Audit](https://github.com/alvintayzhenwei/a2a-mcp-connector/actions/workflows/audit.yml/badge.svg)](https://github.com/alvintayzhenwei/a2a-mcp-connector/actions/workflows/audit.yml)
+[![CodeQL](https://github.com/alvintayzhenwei/a2a-mcp-connector/actions/workflows/codeql.yml/badge.svg)](https://github.com/alvintayzhenwei/a2a-mcp-connector/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 A **generic MCP server that stream-connects an AI agent to any standard
 [A2A](https://a2aprotocol.ai/) endpoint** — plus a built-in A2A Agent Card
 **validator**. Install it once in your MCP-capable agent (Claude Code, Codex,
@@ -87,8 +93,47 @@ runs the standard-A2A structural checks (required fields, tolerant of both the
 
 This package imports neither `a2a_games` nor `a2a_raid_mcp` (its game-specific
 sibling) — its only dependencies are the public `mcp`, `a2a-sdk` (pinned
-`==1.1.0`), and `httpx` — so it is independently publishable to PyPI and reusable
-against any A2A endpoint.
+`==1.1.0`), and `httpx` — so it is reusable against any A2A endpoint. It is
+published to [PyPI](https://pypi.org/project/a2a-mcp-connector/) and developed
+in the open here.
+
+## Development
+
+```bash
+uv sync --frozen --extra dev
+uv run --frozen pytest -q
+```
+
+`--frozen` is deliberate: it installs exactly what `uv.lock` pins and fails if
+the lock has drifted from `pyproject.toml`. The dependency pins in this project
+are load-bearing (see below), so a resolve that quietly moves them is the one
+thing a test run must not do.
+
+## Security
+
+Every push and pull request runs the test suite on Python 3.11 and 3.12,
+[`pip-audit`](https://pypi.org/project/pip-audit/) over the locked runtime
+dependencies, and CodeQL static analysis. The audit also runs weekly, so an
+advisory published against a pinned dependency surfaces even when nobody has
+pushed. Results are in this repository's Actions and Security tabs.
+
+There is no LLM and no API key in this server, and no telemetry. A bearer token
+is optional; when you supply one it lives only in memory for the life of the
+session, is sent as an `Authorization` header to the endpoint you named, and is
+never written to disk, to a log line, or into any tool's return value. The
+connector contacts no host other than the one you point it at.
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md) - please use a private
+advisory rather than a public issue.
+
+### Two pins that look like neglect and are not
+
+`mcp` is capped below 2.0 and `a2a-sdk` is pinned exactly. Both are deliberate,
+both are explained in `pyproject.toml` and [SECURITY.md](SECURITY.md), and
+`tests/test_packaging.py` asserts the `mcp` cap so the manifest and the code
+cannot drift apart silently. Please don't lift either in a drive-by pull
+request - under `mcp` 2.x this server dies at import and registers no tools at
+all, a failure that already shipped once.
 
 ## License
 

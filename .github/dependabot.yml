@@ -1,0 +1,34 @@
+version: 2
+updates:
+  # "uv", not "pip": this project is locked by uv.lock, and the pip ecosystem
+  # reads pyproject.toml without ever updating the lock — so the two would
+  # disagree about what actually gets installed.
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    ignore:
+      # DO NOT merge an mcp 2.x bump as a routine update. server.py imports
+      # `mcp.server.fastmcp.FastMCP`, which mcp 2.0 renamed to
+      # `mcp.server.mcpserver.MCPServer` and deleted, so 2.x breaks the server at
+      # IMPORT: `uvx a2a-mcp-connector` registers no tools at all. That failure already
+      # shipped once, to every user, because the manifest had no upper bound.
+      # Moving to 2.x is a code change plus a verification pass, not a version
+      # bump — see SECURITY.md.
+      - dependency-name: "mcp"
+        versions: [">=2"]
+      # a2a-sdk is pinned exactly, not floored: it has real API churn between
+      # minors, and the call shapes in a2a_client.py are verified against 1.1.0.
+      # A patch bump is fine to look at; a minor or major needs those call shapes
+      # re-verified against the live gateway first.
+      - dependency-name: "a2a-sdk"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
