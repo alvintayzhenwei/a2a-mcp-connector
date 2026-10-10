@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.3 (Unreleased)
+
+- Require PyJWT >=2.15.0 and urllib3 >=2.8.0 in published package metadata,
+  and update the runtime lock to those patched versions.
+- Preserve the reviewed A2A SDK 1.1.5 and MCP 1.30.0 updates, with the MCP <2 cap.
+- Execute session calls outside test assertions and document expected session
+  cancellation to address CodeQL findings.
+- Synchronize the runtime version with package metadata. A new patch version is
+  required because PyPI does not allow replacing the existing 0.1.2 files.
+
 ## 0.1.2 (2026-09-07)
 
 - A `Publish` workflow using PyPI **trusted publishing**: a published GitHub
