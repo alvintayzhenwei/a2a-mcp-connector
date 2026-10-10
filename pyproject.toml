@@ -28,7 +28,7 @@ classifiers = [
 # the PHASE games (Odd One Out / Agent Arena) tell visitors to install, so it was
 # broken in exactly the same way and for exactly as long.
 # Security floors for transitive dependencies must also reach published wheels.
-dependencies = ["mcp>=1.12,<2", "a2a-sdk==1.1.2", "httpx>=0.27", "pyjwt>=2.15.0,<3", "urllib3>=2.8.0,<3"]
+dependencies = ["mcp>=1.12,<2", "a2a-sdk==1.1.5", "httpx>=0.27", "pyjwt>=2.15.0,<3", "urllib3>=2.8.0,<3"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]

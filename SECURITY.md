@@ -51,7 +51,7 @@ Two pins in `pyproject.toml` look like neglect and are not. Please do not
   the range. `tests/test_packaging.py` asserts the cap and ties it to the import
   the server actually uses, so the manifest and the code cannot drift apart
   silently.
-- **`a2a-sdk==1.1.2`** — the A2A SDK has real API churn between minor versions.
+- **`a2a-sdk==1.1.5`** — the A2A SDK has real API churn between minor versions.
   The call shapes in `a2a_client.py` are verified against exactly this version.
 
 Dependabot blocks MCP 2.x and A2A SDK minor/major upgrades (see
