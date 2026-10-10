@@ -16,7 +16,11 @@ import.
 from __future__ import annotations
 
 import tomllib
+from importlib.metadata import version
 from pathlib import Path
+
+import pytest
+from packaging.requirements import Requirement
 
 PYPROJECT = Path(__file__).resolve().parents[1] / "pyproject.toml"
 SERVER = Path(__file__).resolve().parents[1] / "src" / "a2a_mcp_connector" / "server.py"
@@ -61,3 +65,17 @@ def test_every_dependency_states_a_bound() -> None:
     deps = tomllib.loads(PYPROJECT.read_text(encoding="utf-8"))["project"]["dependencies"]
     for dep in deps:
         assert any(op in dep for op in ("==", ">=", "~=")), f"{dep} states no version bound"
+
+
+@pytest.mark.parametrize("name,patched,vulnerable", [
+    ("pyjwt", "2.15.0", "2.14.0"),
+    ("urllib3", "2.8.0", "2.7.0"),
+])
+def test_security_minimums_cover_published_and_locked_dependencies(name, patched, vulnerable):
+    requirement = Requirement(_requirement(name)).specifier
+    assert patched in requirement
+    assert vulnerable not in requirement
+    assert version(name) in requirement
+    lock = tomllib.loads(PYPROJECT.with_name("uv.lock").read_text(encoding="utf-8"))
+    locked = next(package["version"] for package in lock["package"] if package["name"] == name)
+    assert locked in requirement
