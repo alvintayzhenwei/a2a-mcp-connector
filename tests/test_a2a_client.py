@@ -113,9 +113,12 @@ def test_reply_advances_to_next_prompt_then_done():
     s = A2ASession(CARD_URL, "tok", _transport_factory=lambda: transport)
 
     async def _body():
-        assert await s.open() == "turn 1"
-        assert await s.reply("a") == "turn 2"
-        assert await s.reply("b") == DONE
+        prompt = await s.open()
+        assert prompt == "turn 1"
+        prompt = await s.reply("a")
+        assert prompt == "turn 2"
+        prompt = await s.reply("b")
+        assert prompt == DONE
         await s.close()
 
     asyncio.run(_body())
@@ -136,7 +139,8 @@ def test_terminal_task_on_open_returns_done():
     s = A2ASession(CARD_URL, "tok", _transport_factory=lambda: transport)
 
     async def _body():
-        assert await s.open() == DONE
+        prompt = await s.open()
+        assert prompt == DONE
         await s.close()
 
     asyncio.run(_body())

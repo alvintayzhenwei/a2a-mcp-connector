@@ -103,6 +103,7 @@ async def _teardown() -> None:
         try:
             await _driver
         except asyncio.CancelledError:
+            # Cancellation is expected when disconnecting or replacing a session.
             pass
         except Exception:  # noqa: BLE001 - the old driver's own error is irrelevant now
             pass
